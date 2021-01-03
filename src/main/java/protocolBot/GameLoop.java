@@ -4,12 +4,11 @@ import com.github.steveice10.mc.protocol.data.game.entity.metadata.Position;
 import com.github.steveice10.mc.protocol.data.game.entity.player.Hand;
 import com.github.steveice10.mc.protocol.data.game.world.block.BlockFace;
 import com.github.steveice10.mc.protocol.packet.ingame.client.ClientChatPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.client.player.*;
-import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.client.ClientTabCompletePacket;
+import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerPlaceBlockPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.client.window.ClientCraftingBookDataPacket;
 import com.github.steveice10.packetlib.Session;
 import lombok.SneakyThrows;
-
-import java.util.Random;
 
 public class GameLoop implements Runnable {
     private Session session;
@@ -22,24 +21,46 @@ public class GameLoop implements Runnable {
         this.session = session;
     }
 
+    int block = 0;
     @SneakyThrows
     public void run() {
-        Position p = Data.player.getPositionOfPlayerBlock();
-        Data.map.getBlock(p.getX(), p.getY()-1, p.getZ());
-        Thread.sleep(1000);
+        //Position p = Data.player.getPositionOfPlayerBlock();
+        //Data.map.getBlock(p.getX(), p.getY()-1, p.getZ());
+        Thread.sleep(4000);
+        System.out.println("start");
         while (true) {
-            Data.player.setFall(true);
+            //Data.player.setFall(true);
             //jump();
             //jumping();
-            startFalling();
-            fall();
+            //startFalling();
+            //fall();
             //move();
 
 
-            session.send(new ClientPlayerPositionPacket(true, Data.player.getX(), Data.player.getY(), Data.player.getZ()));
+            //session.send(new ClientPlayerPositionPacket(true, Data.player.getX(), Data.player.getY(), Data.player.getZ()));
             //System.out.println(Data.player.getX()+":"+ Data.player.getY()+":"+ Data.player.getZ());
-            //session.send(new ClientPlayerPlaceBlockPacket(new Position(4140,39,15686), BlockFace.UP, Hand.MAIN_HAND, 0.5f, 0.5f, 0.5f));
-            Thread.sleep(50);
+           /* Position p1 = new Position(57999, 255, -45990);
+            Position p2 = new Position(57998, 255, -45990);
+            if(block == 0){
+                session.send(new ClientPlayerChangeHeldItemPacket(0));
+                session.send(new ClientPlayerPlaceBlockPacket(p1, BlockFace.WEST, Hand.MAIN_HAND, 0.5f, 0.5f, 0.5f));
+                block = 1;
+            }else if(block == 1){
+                session.send(new ClientPlayerChangeHeldItemPacket(1));
+                session.send(new ClientPlayerActionPacket(PlayerAction.START_DIGGING, p2, BlockFace.UP));
+                block = 0;
+            }*/
+            //Position p = Data.player.getPositionOfPlayerBlock();
+            //p = new Position(15703, 50, 632);
+            //session.send(new ClientPlayerPlaceBlockPacket(p, BlockFace.UP, Hand.MAIN_HAND, 0.5f, 0.5f, 0.5f));
+
+            //session.send(new ClientChatPacket("(\"value\":{\"text\":\"la\",\"color\":\"red\"})"));
+            session.getPacketProtocol().registerOutgoing(0x0f, MyPacket.class);
+            session.send(new MyPacket());
+            //new ClientCraftingBookDataPacket();
+
+            //session.send(new ClientTabCompletePacket("/is invite ", false));
+            Thread.sleep(2000);
         }
     }
 

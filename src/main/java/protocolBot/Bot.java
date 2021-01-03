@@ -6,6 +6,8 @@ import com.github.steveice10.mc.protocol.data.game.setting.ChatVisibility;
 import com.github.steveice10.mc.protocol.data.game.setting.SkinPart;
 import com.github.steveice10.mc.protocol.packet.ingame.client.ClientChatPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.client.ClientSettingsPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerChangeHeldItemPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerUseItemPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.client.window.ClientConfirmTransactionPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.client.world.ClientTeleportConfirmPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
@@ -51,7 +53,7 @@ public class Bot {
 
     public void tryLogin() {
         MinecraftProtocol protocol;
-        protocol = new MinecraftProtocol("lagger124");
+        protocol = new MinecraftProtocol("lagger125");
 
         client = new Client("192.168.56.104", 25565, protocol, new TcpSessionFactory(proxy));
         client.getSession().addListener((new SessionAdapter() {
@@ -99,7 +101,6 @@ public class Bot {
             public void disconnected(DisconnectedEvent event) {
                 System.out.println("Disconnected: " + event.getReason());
                 System.out.println(event.getCause());
-                System.out.println();
                 if (event.getCause() != null) {
                     event.getCause().printStackTrace();
                 }
@@ -150,19 +151,21 @@ public class Bot {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                //client.getSession().send(new ClientPlayerChangeHeldItemPacket(0));
+                client.getSession().send(new ClientPlayerChangeHeldItemPacket(0));
                 try {
                     Thread.sleep(300);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                //client.getSession().send(new ClientPlayerUseItemPacket(Hand.MAIN_HAND));
+                client.getSession().send(new ClientPlayerUseItemPacket(Hand.MAIN_HAND));
                 try {
                     Thread.sleep(300);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                Methods.clickItem(client.getSession(), 38);
+                //Methods.clickItem(client.getSession(), 38);
+                //Methods.clickItem(client.getSession(), 16);
+                Methods.clickItem(client.getSession(), 24);
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
